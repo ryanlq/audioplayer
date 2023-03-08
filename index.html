@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,viewport-fit=cover,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="./icon/apple-icon-180x180.png">
+    <title>音乐</title>
+    <link rel="icon" href="./icon/favicon.ico" sizes="any" />
+    <link rel="icon" href="./icon/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#181c25" />
+    <!-- <link rel="preload" href="./skins/preload.css" /> -->
+    <link rel="stylesheet" href="about.css" />
+    <link rel="stylesheet" href="my.css" />
+    <link rel="stylesheet" href="skins/default.css" id="default-stylesheet" />
+    <meta http-equiv="origin-trial" content="Anis2Rwm4wMgVdj20cDZtpc3+ICrimlJA0dKFx4wqdERgdHKwE4EHTH3misGpnEhGJSnaVlaeAi92b6KSgCGXYAAAAB0eyJvcmlnaW4iOiJodHRwczovL21pY3Jvc29mdGVkZ2UuZ2l0aHViLmlvOjQ0MyIsImlzU3ViZG9tYWluIjpmYWxzZSwiZmVhdHVyZSI6Im1zV2ViQXBwV2lkZ2V0cyIsImV4cGlyeSI6MTY4NTU3NzYwMH0=">
+  </head>
+  <body style="background-size:cover !important;" class="loading">
+    <style>
+  .lds-preload {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-preload div {
+    display: inline-block;
+    position: absolute;
+    left: 8px;
+    width: 16px;
+    background: #fff;
+    animation: lds-preload 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+  }
+  .lds-preload div:nth-child(1) {
+    left: 8px;
+    animation-delay: -0.24s;
+  }
+  .lds-preload div:nth-child(2) {
+    left: 32px;
+    animation-delay: -0.12s;
+  }
+  .lds-preload div:nth-child(3) {
+    left: 56px;
+    animation-delay: 0;
+  }
+  @keyframes lds-preload {
+    0% {
+      top: 8px;
+      height: 64px;
+    }
+    50%, 100% {
+      top: 24px;
+      height: 32px;
+    }
+  }
+
+    </style>
+    <div id="load-view">
+      <div class="lds-preload"><div></div><div></div><div></div></div>
+    </div>
+    <div
+      id="wco-drag"
+      style="
+        position: fixed;
+        top: env(titlebar-area-y);
+        left: env(titlebar-area-x);
+        height: env(titlebar-area-height);
+        width: env(titlebar-area-width);
+        -webkit-app-region: drag;
+      "
+    ></div>
+    <div id="header">
+      <ul>
+        <li class="select">全部</li>
+        <li>歌曲</li>
+        <li>戏曲</li>
+        <li>收藏</li>
+      </ul>
+      <button id="managerbtn">管理</button>
+    </div>
+    
+    <div class="main-view">
+      <section id="lyric-panel">
+        加载中……
+      </section>
+      <section class="playlist">
+        <p class="empty-playlist">
+          点击 <strong>+</strong> 添加歌曲
+        </p>
+        <ol class="songs"></ol>
+      </section>
+      <section class="player">
+        <div class="playhead-control">
+          <span id="currenttime">00:00</span>
+          <input
+            type="range"
+            id="playhead"
+            aria-label="Current position in song"
+            value="0"
+          />
+          <span id="duration">00:00</span>
+        </div>
+        <div class="player-controls">
+          <button id="add-local-song">
+            <img src="./imgs/add.svg"/>
+          </button>
+          <button
+            class="player-control-button main-button"
+            id="previous"
+            title="Go to the previous song or the beginning of song (P)"
+          >
+            <span></span>
+            <img src="./imgs/prev.svg"/>
+          </button>
+          <button
+            class="player-control-button main-button"
+            id="playpause"
+            title="Play (space)"
+          >
+            <span></span>
+            <img class="play" src="./imgs/play.svg"/>
+            <img class="pause" src="./imgs/pause.svg"/>
+          </button>
+          <button
+            class="player-control-button main-button"
+            id="next"
+            title="Go to the next song (N)"
+          >
+          <span></span>
+          <img src="./imgs/next.svg"/>
+          </button>
+          <button
+            class="main-button"
+            id="toggle-visualizer"
+            title="Show visualizer (V)"
+          >
+            <span>Show visualizer</span>
+          </button>
+        </div>
+  
+
+      </section>
+    </div>
+
+    <section class="current-song"></section>
+
+    <section class="volume">
+      <label for="volume">Volume</label>
+      <input type="range" id="volume" min="0" max="10" value="10" />
+    </section>
+
+    <section class="app-controls">
+      <button
+        class="main-button"
+        id="add-songs"
+        title="Add new songs to the playlist"
+      >
+        <span>Add new songs</span>
+      </button>
+
+    </section>
+
+
+    <canvas id="waveform"></canvas>
+
+
+
+    <script src="./libs/swiped-events.min.js"></script>
+    <script src="popup-polyfill.js"></script>
+
+    <script type="module" src="app.js"></script>
+    <script type="module" src="file-launch-handler.js"></script>
+    <script type="module" src="protocol-launch-handler.js"></script>
+    <script type="module" src="share-target-launch-handler.js"></script>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js");
+      }
+      
+      window.addEventListener('load', (event) => {
+        document.body.classList.remove("loading")
+      });
+    </script>
+
+  </body>
+</html>
