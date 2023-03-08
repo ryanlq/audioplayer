@@ -45,7 +45,7 @@ const playlistEl = document.querySelector(".playlist");
 export const playlistSongsContainer = document.querySelector(".playlist .songs");
 // const addSongsButton = document.getElementById("add-songs");
 
-const installButton = document.getElementById("install-button");
+// const installButton = document.getElementById("install-button");
 const currentSongSection = document.querySelector('.current-song');
 const lyricPanel = document.querySelector('#lyric-panel');
 const Manager = document.querySelector('#managerbtn');
@@ -300,9 +300,10 @@ if (!isInstalledPWA && !isSidebarPWA) {
     // Don't let the default prompt go.
     e.preventDefault();
   });
-} else {
-  installButton.disabled = true;
-}
+} 
+// else {
+//   installButton.disabled = true;
+// }
 
 // Start the app.
 startApp();
