@@ -593,7 +593,6 @@ function attach_extra_events(){
     }
      
   })
-  console.log(player)
   //倍速播放
   SpeedBtn.addEventListener("click",()=>{
     SpeedOptions.classList.toggle("hide")
@@ -608,8 +607,6 @@ function attach_extra_events(){
       SpeedOptions.classList.add("hide")
     })
   })
-
-
 }
 
 

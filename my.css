@@ -541,7 +541,7 @@ display: none;
 .visualizing .playhead-control {
     display: none !important;
 }
-.study #speed{
+.learning #speed{
     display: none;
 }
 #speed{
