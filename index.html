@@ -84,7 +84,7 @@
     
     <div class="main-view">
       <section id="lyric-panel">
-        加载中……
+        等待中
       </section>
       <section class="playlist">
         <p class="empty-playlist">
@@ -94,6 +94,8 @@
       </section>
       <section class="player">
         <div class="playhead-control">
+          <span id="repeat1"><img class="default"  src="./imgs/repeat.svg"/><img class="repeat-1 hide" src="./imgs/repeat1.svg"/></span>
+          
           <span id="currenttime">00:00</span>
           <input
             type="range"
@@ -144,28 +146,29 @@
 
       </section>
     </div>
+    <div style="height:0;overflow: hidden;visibility: hidden;">
+        <section class="current-song"></section>
 
-    <section class="current-song"></section>
+        <section class="volume">
+          <label for="volume">Volume</label>
+          <input type="range" id="volume" min="0" max="10" value="10" />
+        </section>
 
-    <section class="volume">
-      <label for="volume">Volume</label>
-      <input type="range" id="volume" min="0" max="10" value="10" />
-    </section>
+        <section class="app-controls">
+          <button
+            class="main-button"
+            id="add-songs"
+            title="Add new songs to the playlist"
+          >
+            <span>Add new songs</span>
+          </button>
 
-    <section class="app-controls">
-      <button
-        class="main-button"
-        id="add-songs"
-        title="Add new songs to the playlist"
-      >
-        <span>Add new songs</span>
-      </button>
-
-    </section>
+        </section>
 
 
-    <canvas id="waveform"></canvas>
+        <canvas id="waveform"></canvas>
 
+    </div>
 
 
     <script src="./libs/swiped-events.min.js"></script>

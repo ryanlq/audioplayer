@@ -48,6 +48,7 @@ export class Player extends EventTarget {
     this.audio.addEventListener('timeupdate', e => {
       this.dispatchEvent(new Event('timeupdated'));
     });
+
   }
 
   async loadPlaylist() {
@@ -101,7 +102,7 @@ export class Player extends EventTarget {
       currentIndex = songs.indexOf(this.song);
 
       if (!newSongWasLoaded) {
-        this.dispatchEvent(new Event('canplay'));
+        this.dispatchEvent(new Event('canplay'),{ bubbles: true});
       }
 
     } catch (error) {
@@ -162,5 +163,13 @@ export class Player extends EventTarget {
 
   get duration() {
     return this.audio.duration;
+  }
+
+  get loop() {
+    return this.audio.loop;
+  }
+
+  set loop(loop) {
+    this.audio.loop = loop;
   }
 }

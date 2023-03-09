@@ -181,7 +181,6 @@ export async function guessSongInfo(file) {
   // Next parse the audio metadata.
   const fromMetadata = await guessSongInfoFromFile(file);
 
-  console.log(fromFileName,fromMetadata)
   // If anything is missing from the metadata, complete it from the file name.
   return {
     album: fromMetadata.album || fromFileName.album || '单曲',

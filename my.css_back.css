@@ -1,9 +1,15 @@
-
-html,body{
+html{
+    width: 100%;
+    height: 100%;
+}
+body{
     height: 100% !important;
     width: 100% !important;
-    overflow: hidden;
-    user-select: none;
+    max-width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+
 }
 
 :root {
@@ -11,70 +17,33 @@ html,body{
     --safe-bottom: 0px;
   }
   
-@supports (top: constant(safe-area-inset-top)) {
+  @supports (top: constant(safe-area-inset-top)) {
     :root {
       --safe-top: constant(safe-area-inset-top);
       --safe-bottom: constant(safe-area-inset-bottom);
     }
-}
+  }
   
-@supports (top: env(safe-area-inset-top)) {
+  @supports (top: env(safe-area-inset-top)) {
     :root {
       --safe-top: env(safe-area-inset-top);
       --safe-bottom: env(safe-area-inset-bottom);
     }
-}
-
-/* layout items start*/
-.main-view{
-    display: grid;
-    /* flex-direction: column;
-    justify-content: space-between; */
-    width: 100%;
-    height: 100%;
-    background-color: #11191f30;
-    overflow-x: hidden;
-    overflow-y: auto;
-    grid-template:
-        "playlist" 1fr
-        "player" auto
-        / 1fr;
-}
-.visualizing  .main-view{
-    grid-template:
-    "lyric" 1fr
-    "player" auto
-    / 1fr;
-}
-.playlist{
-    grid-area: playlist;
-    z-index: 10;
-    
-}
-
-.player {
-    grid-area: player;
-    padding: 5px !important;
-    background-color: #00000029;
-    filter: drop-shadow(1px 1px 22px #85040491) invert(1%);
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    border-top-color: #00000040;
-    border-top-width: 1px;
-    border-top-style: double;
-}
+  }
 #lyric-panel{
-    height: 1px;
-    width: 1px;
-    position: absolute;
-    right: -1px;
-    grid-area: lyric;
     padding-top: var(--safe-top);
+    visibility: hidden;
     font-family:STFangsong ;
+    display: flex;
+    position: fixed;
     align-items:center;
     justify-self:center;
     /* box-shadow: 0px 0px 0px 4px var(--primary); */
+    top:0;
+    width: 100%;
+    height: calc(100% - 94px);
+    padding-bottom: calc((100% - 94px)/2);
+    padding-top: 20px;
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto;
@@ -83,18 +52,11 @@ html,body{
 }
 
 .visualizing #lyric-panel{
-    height: auto;
-    width: 100%;
-    position:unset;
-    display:flex;
-    padding: 20px 0 50% 0;
+    visibility:visible;
 }
 .visualizing .main-view{
     flex-direction: column-reverse;
 }
-
-/* layout items end*/
-
 .lyric-item{
     padding: 5px;
     cursor: pointer;
@@ -183,7 +145,23 @@ html.playing  .lyric-item.playing,.lyric-item.playing{
     white-space: nowrap;
     text-overflow: ellipsis;
 }
-
+/* .playlist-song.playing .title {
+    display: inline-block;
+    text-overflow: unset;
+    animation: move 1.5s infinite alternate linear;
+}
+.playlist-song .artwork {
+    z-index: 2;
+}
+ 
+@keyframes move {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(calc(100px - 100%), 0);
+    }
+} */
 .playlist-song .row1{
     display: flex;
     justify-content: space-between;
@@ -204,20 +182,44 @@ html.playing  .lyric-item.playing,.lyric-item.playing{
     visibility: hidden;
 }
 
-
+.main-view{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: #11191f30;
+}
 
 
 #add-local-song img{
     width: 3rem;
     height: 3rem;
 }
+.player{
+    padding: 5px !important;
 
+}
 
 .player-controls{
     align-items: center;
 }
 
 
+.player {
+    background-color: #00000029;
+    filter: drop-shadow(1px 1px 22px #85040491) invert(1%);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border-top-color: #00000040;
+    border-top-width: 1px;
+    border-top-style: double;
+}
+body {
+    user-select: none;
+}
 
 .playlist.has-songs .empty-playlist {
     display: none;
@@ -323,11 +325,11 @@ html.playing  .lyric-item.playing,.lyric-item.playing{
 .player-controls #previous::before, .player-controls #next::before{
     display: none;
 }
-.playlist .songs{
-    padding-top: 40px;
-    padding-bottom: 50px;
+.playlist{
+    z-index: 10;
+}
+.playlist, .songs{
     overflow-y: auto;
-    overflow-x: hidden;
     -ms-overflow-style: none; /* IE */
     scrollbar-width: none; /* Firefox */
 }
@@ -378,7 +380,6 @@ html.playing  .lyric-item.playing,.lyric-item.playing{
     justify-content: space-between;
     align-items: center;
     height: 60px;
-    z-index: 11;
     width: 100%;
     background-color: #00000030;
     border-bottom: 1px solid #403f3f;
@@ -393,7 +394,7 @@ html.playing  .lyric-item.playing,.lyric-item.playing{
 #header li{
     padding: 10px;
     background-color: var(--primary);
-    color: #d4d4d4;
+    color: #f1f1f1;
     /* height: 100%; */
     display: flex;
     align-items: center ;
@@ -450,9 +451,10 @@ html.playing  .lyric-item.playing,.lyric-item.playing{
 }
 
 .main-view .songs{
-    /* padding-top: 50px;
-    padding-bottom: 100px; */
+    padding-top: 50px;
+    padding-bottom: 100px;
     height: 100%;
+    margin-top: 120px;
 }
 
 html {
@@ -463,6 +465,13 @@ html {
 display: none;
 }
 
+.playlist, .playlist .songs{
+-ms-overflow-style: none;
+height: 100%;
+width: calc(100vw + 18px);
+overflow-y: auto;
+overflow-x: hidden;
+}
 
 .playlist::-webkit-scrollbar ,.playlist .songs::-webkit-scrollbar{
     width:0px;
@@ -509,13 +518,12 @@ display: none;
 .primary-button,.cancel-button{
     background-color:var(--origin);
     color: #000;
-    padding: .5rem;
+    padding: 10px;
     box-shadow: inset 0px 0px 16px 0px rgba(0, 0, 0, 0.4);
-    width: 6rem;
-    font-size: 1rem;
+    width: 84px;
 }
 .cancel-button{
-    color: #d4d4d4;
+    color: #fff;
     background-color:var(--primary);
 }
 .playhead-control{
@@ -558,11 +566,4 @@ display: none;
     grid-area: d;
     text-align: right !important;
     width: 100% !important;
-}
-
-#toggle-visualizer{
-    background-image: url(./imgs/lyric.png) !important;
-    background-size: cover !important;
-    border-radius: 0 !important;
-    background-color: #0000 !important;
 }

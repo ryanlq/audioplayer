@@ -19,16 +19,11 @@ export function fileReader(action,id){
 }
 
 async function saveLyric(id,file){
-    const extra = await getExtraByID(id)
     const buffer = await file.arrayBuffer()
     const lyric = texter.decode(buffer)
     const match = lyric && lyric.match(/^\[\d\d:\d\d/)
     if(match.length == 0) toast({msg:"文件格式错误！"})
     else {
-        if(!extra) await updateExtra(id,{"lyric":lyric})
-        else {
-            extra["lyric"] = lyric
-            await updateExtra(id,extra)
-        }
+        document.dispatchEvent(new CustomEvent("store-extra",{bubbles:true,detail:{id,extra:["lyric",lyric]}}))
     }
 }

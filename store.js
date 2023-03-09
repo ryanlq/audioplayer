@@ -163,16 +163,18 @@ export async function editSongTags(updatetags) {
   await set('pwamp-tags', alltags);
 
 }
-export async function updateExtra(id,extra) {
-  let allExtras = await getExtra();
-  if (!allExtras || !id){
+export async function updateExtra(id,[key,value]) {
+  let extras = await getExtra();
+  if (!extras || !id){
     await setExtra({})
-    allExtras = await getExtra();
+    extras = await getExtra();
   } 
   
-
-  allExtras[id] = extra
-  await set('pwamp-extra', allExtras);
+  if(!extras[id]){
+    extras[id] = {}
+  } 
+  extras[id][key] = value
+  await set('pwamp-extra', extras);
 }
 
 /**

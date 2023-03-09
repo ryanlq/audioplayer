@@ -4,12 +4,12 @@ let container =document.createElement("div")
 container.id = "toast"
 
 container.style=`
-    background-color:#000;
+    background-color:#171b23;
     width:auto;
     max-width:300px;
     height:auto;
-    color:#eee;
-    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%);
+    color:rgb(255 72 72);
+    box-shadow: 0 2px 5px 0 rgb(255 255 255 / 26%);
     overflow: hidden;
     position:fixed;
     z-index:999;
@@ -19,6 +19,7 @@ container.style=`
     right: 0;
     margin: 0 auto;
     padding: 30px 0;
+    border:1px solid #fff;
     
 `
 

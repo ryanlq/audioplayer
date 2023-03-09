@@ -82,27 +82,6 @@ export function createSongUI(playlistSongsContainer, song, stateLess,tagstr="") 
   baseInfo.appendChild(titleInput);
   li.appendChild(baseInfo)
 
-  // Artist name
-  // const artistInput = document.createElement("span");
-  // artistInput.classList.add('artist');
-  // artistInput.setAttribute('title', 'Artist');
-  // artistInput.textContent = song.artist;
-  // if (!stateLess) {
-  //   artistInput.setAttribute('contenteditable', true);
-  //   artistInput.setAttribute('spellcheck', false);
-  // }
-  // li.appendChild(artistInput);
-
-  // Album name
-  // const albumInput = document.createElement("span");
-  // albumInput.classList.add('album');
-  // albumInput.setAttribute('title', 'Album');
-  // albumInput.textContent = song.album;
-  // if (!stateLess) {
-  //   albumInput.setAttribute('contenteditable', true);
-  //   albumInput.setAttribute('spellcheck', false);
-  // }
-  // li.appendChild(albumInput);
   song.album && item.setAttribute("album",song.album)
   song.artist && item.setAttribute("album",song.artist)
 
@@ -205,7 +184,7 @@ export function createSongUI(playlistSongsContainer, song, stateLess,tagstr="") 
 
   const tag = document.createElement("li")
   tag.classList.add("tag")
-  //todo tags store 存取 读取
+  //todo: tags store 存取 读取
   // alltags = ["歌曲","戏曲","收藏"]
   const alltags = ["歌曲","戏曲","收藏"]
   const hastags = tagstr?tagstr.split(","):[]
@@ -246,10 +225,11 @@ export function createSongUI(playlistSongsContainer, song, stateLess,tagstr="") 
     return _tag
   })
   tags.append(...tagnodes)
-  item.appendChild(li)
-  item.appendChild(tags)
+    item.appendChild(li)
+    item.appendChild(tags)
+
   playlistSongsContainer.appendChild(item);
-  return li;
+  return item;
 }
 
 export function createLoadingSongPlaceholders(playlistSongsContainer, nbOfPlaceholders) {

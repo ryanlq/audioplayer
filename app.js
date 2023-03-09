@@ -93,13 +93,14 @@ function updateUI() {
 
   // Update the play head and current time/duration labels.
   const currentTime = player.currentTime;
-  const duration = player.duration;
+  let duration = 0;
+  duration = player.duration;
 
   playHeadInput.value = currentTime;
   playHeadInput.max = duration;
 
   currentTimeLabel.innerText = formatTime(currentTime);
-  durationLabel.innerText = formatTime(duration);
+  durationLabel.innerText = formatTime(duration?duration:0);
 
   if (player.isPlaying) {
     playButton.classList.add('playing');
@@ -170,24 +171,22 @@ playButton.addEventListener("click", () => {
   if (player.isPlaying) {
     player.pause();
   } else {   
-    
     player.play();
   }
 });
 
 // Seek on playhead input.
-playHeadInput.addEventListener("input", () => {
-  
-  updateUI()
+playHeadInput.addEventListener("input", (e) => {
   player.currentTime = playHeadInput.value;
+  updateUI()
 });
 
 // Manage the volume input
 volumeInput.addEventListener("input", () => {
   
-  updateUI()
   player.volume = volumeInput.value / 10;
   setVolume(player.volume);
+  updateUI()
 });
 
 // Manage the previous and next buttons.
@@ -205,18 +204,17 @@ function goPrevious() {
 }
 
 previousButton.addEventListener("click", () => {
-  updateUI()
   goPrevious();
+  updateUI()
 });
 
 nextButton.addEventListener("click", () => {
-  updateUI()
   player.playNext();
+  updateUI()
 });
 
 // Also go to the next or previous songs if the SW asks us to do so.
 navigator.serviceWorker.addEventListener('message', (event) => {
-  updateUI()
   switch (event.data.action) {
     case 'play':
       player.play();
@@ -230,14 +228,15 @@ navigator.serviceWorker.addEventListener('message', (event) => {
       break;
   }
   
+  updateUI()
 });
 
 
 player.addEventListener("paused", () => {
-  updateUI()
   isVisualizing() && visualizer.stop();
   // Also tell the SW we're paused.
   sendMessageToSW({ action: 'paused' });
+  updateUI()
 });
 
 async function sendMessageToSW(data) {
@@ -249,8 +248,8 @@ async function sendMessageToSW(data) {
 
 // Listen to beforeunload to clean things up.
 addEventListener('beforeunload', () => {
-  updateUI()
   sendMessageToSW({ action: 'paused' });
+  updateUI()
 });
 
 // Listen to song errors to let the user know they can't play remote songs while offline.
@@ -260,10 +259,10 @@ player.addEventListener("error", () => {
   }
 });
 player.addEventListener("playing", () => {
-  updateUI()
   if (currentSongEl) {
     currentSongEl.classList.remove('error');
   }
+  updateUI()
 });
 
 
@@ -314,14 +313,14 @@ sendMessageToSW({ action: 'paused' });
 // Initialize the shortcuts.
 initKeyboardShortcuts(player, toggleVisualizer);
 const speak = Speaker()
-function loadLyric(){
-  if(player.song && player.song.id){
+function loadLyric(force=false){
+  if( player.song && player.song.id){
     const lyric_songid = lyricPanel.getAttribute("songid")
-    if(player.song.id !== lyric_songid){
+    if((player.song.id !== lyric_songid) || force){
       let dir = "./imgs/"
       let count = 16
       
-      if(document.documentElement.offsetWidth<800){
+      if(document.documentElement.offsetWidth < 800){
         count =20
         dir ="./imgs/mobile/"
       }  
@@ -332,6 +331,7 @@ function loadLyric(){
       let text = ""
       const extra = Extrainfos ? Extrainfos[player.song.id] : null
       text = extra? extra["lyric"] : player.song.lyric
+
       if(text){
         lyric.load( text)
         setLyricPanel()
@@ -347,24 +347,13 @@ function loadLyric(){
 
 async function setLyricPanel(isEmpty=false){
   //updateExtra
-  
   lyricPanel.innerHTML = ""
   if(isEmpty){
 
       let _song = await getSong(player.song.id)
       const lyric = await LyricParser(_song.title,_song.artist)
-      
       if(lyric){
-        const extrainfos = await getExtra()
-        let new_extra = null
-        if(!extrainfos || !extrainfos[player.song.id]){
-          new_extra = {lyric}
-        } else {
-          new_extra = extrainfos[player.song.id]
-          new_extra["lyric"] = lyric
-        }
-        await updateExtra(_song.id,new_extra)
-        await startApp()
+        document.dispatchEvent(new CustomEvent("store-extra",{bubbles:true,detail:{id:_song.id,extra:["lyric",lyric]}}))
       } 
   }
 
@@ -375,7 +364,7 @@ async function setLyricPanel(isEmpty=false){
     const wrapper = document.createElement("p")
     const addbtn = document.createElement("button")
     addbtn.innerText = " + "
-    addbtn.style = "color:var(--origin);cursor:pointer; background-color:#000;border: 1px solid var(--origin);border-radius: 50%;"
+    addbtn.style = "color:var(--origin);cursor:pointer; background-color:#000;border: 1px solid var(--origin);border-radius: 50%; width: 30px;height: 30px;"
     addbtn.addEventListener("click",function (e) { 
       fileReader("lyric",player.song.id)
     })
@@ -409,13 +398,13 @@ async function setLyricPanel(isEmpty=false){
   }
 }
 
-
-
-
+//实时更新歌词 和 播放时间。
 player.addEventListener('timeupdated', (e) => {
-  let minites = parseInt(e.target.audio.currentTime /60)
+  const _currentTime = e.target.audio.currentTime
+  update_player_times(_currentTime)
+  let minites = parseInt(_currentTime /60)
   // let seconds = (e.target.audio.currentTime %60).toFixed(3)
-  let seconds = parseInt(e.target.audio.currentTime %60)
+  let seconds = parseInt(_currentTime %60)
 
   if(minites < 10) minites = "0"+minites
   if(seconds < 10) seconds = "0"+seconds
@@ -442,22 +431,6 @@ player.addEventListener('timeupdated', (e) => {
 
 },false);
 
-function add_local_song(){
-  const btn = document.querySelector("#add-local-song")
-  btn.addEventListener("click",async function(e){
-    console.log(e)
-    const files = await openFilesFromDisk();
-
-    try {
-      createLoadingSongPlaceholders(playlistSongsContainer, files.length);
-      await importSongsFromFiles(files);
-  
-      await startApp();
-    } catch (error) {
-      console.log(error)
-    }
-  })
-}
 
 async function updateTags(){
   //取得修改信息
@@ -565,8 +538,65 @@ addEventListener('delete-song', async(e) => {
   }
 });
 
+addEventListener('store-extra', async e=>{
+  const {id,extra} = e.detail;
+  if( id && extra instanceof Array){
+    await updateExtra(id,extra)
+    Extrainfos = await getExtra()
+    toast({msg:"载入成功，稍等！"})
+    loadLyric(true)
+  }
+})
+player.addEventListener('canplay', async e=>{
+  if(playHeadInput.max == "NaN" || !playHeadInput.max) {
+    playHeadInput.min = 0;
+    playHeadInput.max = player.duration ;
+  }
+  durationLabel.innerText = formatTime(player.duration);
+})
+
+function update_player_times(current_time){
+  if(current_time < 0) return ;
+  currentTimeLabel.innerText = formatTime(current_time)
+  playHeadInput.value = current_time
+}
+function attach_extra_events(){
+  const btn = document.querySelector("#add-local-song")
+  btn.addEventListener("click",async function(e){
+    const files = await openFilesFromDisk();
+    try {
+      createLoadingSongPlaceholders(playlistSongsContainer, files.length);
+      await importSongsFromFiles(files);
+      await startApp()
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
+  const repeat1 = document.querySelector("#repeat1")
+  repeat1.addEventListener("click",e=>{
+    const current = repeat1.getAttribute("current")
+    if(!current || current == "default"){
+      player.loop = true;
+      repeat1.setAttribute("current","repeat-1")
+      repeat1.querySelector(".default").classList.add("hide")
+      repeat1.querySelector(".repeat-1").classList.remove("hide")
+    } else {
+      player.loop = false;
+      repeat1.setAttribute("current","default")
+      repeat1.querySelector(".default").classList.remove("hide")
+      repeat1.querySelector(".repeat-1").classList.add("hide")
+
+    }
+     
+  })
+
+}
+
+
+
 window.onload = ()=>{
-  add_local_song()
+  attach_extra_events()
   preload()
   manageSongs()
   handle_tag()
