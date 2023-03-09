@@ -25,26 +25,25 @@ html,body{
     }
 }
 
-/* layout items start*/
 .main-view{
     display: grid;
+    position: relative;
     /* flex-direction: column;
     justify-content: space-between; */
     width: 100%;
     height: 100%;
     background-color: #11191f30;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
     grid-template:
-        "playlist" 1fr
-        "player" auto
-        / 1fr;
+        "playlist playlist playlist" 1fr
+        "player player player" auto
+        / 1fr 1fr 1fr;
 }
 .visualizing  .main-view{
     grid-template:
-    "lyric" 1fr
-    "player" auto
-    / 1fr;
+    "lyric lyric lyric" 1fr
+    "player player player" auto
+    / 1fr 1fr 1fr;
 }
 .playlist{
     grid-area: playlist;
@@ -52,6 +51,18 @@ html,body{
     
 }
 
+#setting {
+    grid-area: setting;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2; 
+    background-color: green;
+    z-index: -1;
+    width: 100px;
+    position: absolute;
+    height: 100%;
+}
 .player {
     grid-area: player;
     padding: 5px !important;
@@ -87,13 +98,14 @@ html,body{
     width: 100%;
     position:unset;
     display:flex;
-    padding: 20px 0 50% 0;
+    padding: 20px 0 100px 0;
 }
 .visualizing .main-view{
     flex-direction: column-reverse;
 }
 
-/* layout items end*/
+
+
 
 .lyric-item{
     padding: 5px;
@@ -238,13 +250,12 @@ html.playing  .lyric-item.playing,.lyric-item.playing{
 
 
   @keyframes color {
-    0%  { background: #f5de16dc; }
     25%  { background: #f5df1661; }
     50%  { background: #97f008cb; }
     75%  { background: #97f0086a; }
-    100%   { background: #f5de16dc; }
   }
-  
+
+  /* .playlist-song.playing::before{ */
   .playlist-song.playing {
     color:#000;
     background: #f5de16dc;
@@ -521,8 +532,8 @@ display: none;
 .playhead-control{
     display: grid !important;
     grid-template:
-    ". t . . . . d ." 20px
-    ". p p p p p p r" 30px
+    ". t . . . . d ." 1.5rem
+    "s p p p p p p r" 2.6rem
     / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr ;
     gap: 0 !important;
     text-align: center;
@@ -530,15 +541,60 @@ display: none;
 .visualizing .playhead-control {
     display: none !important;
 }
-#repeat1{
-    grid-area: r;
+.study #speed{
+    display: none;
+}
+#speed{
+    grid-area: s;
+}
+#speed .options{
+    position: absolute;
+    display: flex;
+    top: -15px;
+    left: 5px;
+    background-color: #fff;
+    padding: 5px;
+    box-shadow: inset 0px 0px 5px 0px #440019;
 
 }
-#repeat1 img {
-    width: 30px;
-    height: 30px;
+#speed li{
+    background-color: #000;
+    height: 2.1rem;
+    width: 2.1rem;
     border-radius: 50%;
-    padding: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 3px;
+}
+#speed li:hover{
+    background-color: #ed266e;
+}
+#speed .label{
+    position: relative;
+    display: inline-flex;
+    height: 2.1rem;
+    width: 2.1rem;
+    padding: .3rem;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #ed266e;
+    justify-content: center;
+    align-items: center;
+}
+#speed .label[speed="1"]{
+    background-color: #000;
+    border: 2px solid var(--origin);
+}
+#repeat1{
+    grid-area: r;
+}
+#repeat1 img {
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    padding: .3rem;
     cursor: pointer;
 }
 #repeat1 .repeat-1{

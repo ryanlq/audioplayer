@@ -8,9 +8,9 @@ export function initMediaSession(player) {
   function updateMediaSessionState() {
     navigator.mediaSession.playbackState = player.audio.paused ? 'paused' : 'playing';
     navigator.mediaSession.setPositionState({
-      duration: player.audio.duration,
-      position: player.audio.currentTime,
-      playbackRate: player.audio.playbackRate
+      duration: player.audio.duration || 0,
+      position: player.audio.currentTime || 0,
+      playbackRate: player.audio.playbackRate || 1
     });
   }
 

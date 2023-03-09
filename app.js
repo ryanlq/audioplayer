@@ -51,6 +51,8 @@ const lyricPanel = document.querySelector('#lyric-panel');
 const Manager = document.querySelector('#managerbtn');
 const TagMenusContainer = document.querySelector('#header ul');
 const TagMenus = document.querySelectorAll('#header ul li');
+const SpeedBtn = document.querySelector('#speed .label');
+const SpeedOptions = document.querySelector('#speed .options');
 
 let currentSongEl = null;
 
@@ -101,6 +103,11 @@ function updateUI() {
 
   currentTimeLabel.innerText = formatTime(currentTime);
   durationLabel.innerText = formatTime(duration?duration:0);
+
+  let playbackRate = 1;
+  playbackRate = player.playbackRate
+  SpeedBtn.innerText = playbackRate
+  SpeedBtn.setAttribute("speed",playbackRate)
 
   if (player.isPlaying) {
     playButton.classList.add('playing');
@@ -167,12 +174,12 @@ export async function startApp() {
 // Manage the play button.
 playButton.addEventListener("click", () => {
   
-  updateUI()
   if (player.isPlaying) {
     player.pause();
   } else {   
     player.play();
   }
+  updateUI()
 });
 
 // Seek on playhead input.
@@ -275,23 +282,17 @@ function isVisualizing() {
 visualizerButton.addEventListener('click', toggleVisualizer);
 
 function toggleVisualizer() {
+  if(playlistSongsContainer.children.length == 0) {
+    toast({msg:"歌曲库为空！"})
+    return;
+  }
   const isVis = isVisualizing();
 
   // If we're asked to visualize but no song is playing, start the first song.
   if (!isVis && !player.isPlaying) {
     player.play()
   }
-
-
-
   document.documentElement.classList.toggle('visualizing');
-
-
-  // if(isVis){
-  //   visualizer.stop()
-  // } else {
-  //   visualizer.start()
-  // }
 }
 
 if (!isInstalledPWA && !isSidebarPWA) {
@@ -561,6 +562,7 @@ function update_player_times(current_time){
   playHeadInput.value = current_time
 }
 function attach_extra_events(){
+  //添加本地歌曲
   const btn = document.querySelector("#add-local-song")
   btn.addEventListener("click",async function(e){
     const files = await openFilesFromDisk();
@@ -573,6 +575,7 @@ function attach_extra_events(){
     }
   })
 
+  //单曲循环
   const repeat1 = document.querySelector("#repeat1")
   repeat1.addEventListener("click",e=>{
     const current = repeat1.getAttribute("current")
@@ -590,6 +593,22 @@ function attach_extra_events(){
     }
      
   })
+  console.log(player)
+  //倍速播放
+  SpeedBtn.addEventListener("click",()=>{
+    SpeedOptions.classList.toggle("hide")
+  })
+  SpeedOptions.querySelectorAll("li").forEach(opt=>{
+    opt.addEventListener("click",e=>{
+      const value = opt.innerText
+      console.log(value)
+      player.playbackRate = value
+      SpeedBtn.setAttribute("speed",value)
+      SpeedBtn.innerText = value
+      SpeedOptions.classList.add("hide")
+    })
+  })
+
 
 }
 

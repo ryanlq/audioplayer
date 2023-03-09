@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="study">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -83,6 +83,7 @@
     </div>
     
     <div class="main-view">
+      <!-- <div id="setting">TEst</div> -->
       <section id="lyric-panel">
         等待中
       </section>
@@ -94,6 +95,17 @@
       </section>
       <section class="player">
         <div class="playhead-control">
+          <div id="speed">
+              <div class="label" speed="1">1</div>
+              <ul class="hide options">
+                <li>0.5</li>
+                <li>0.75</li>
+                <li>0.85</li>
+                <li>1</li>
+                <li>1.5</li>
+                <li>2</li>
+              </ul>
+          </div>
           <span id="repeat1"><img class="default"  src="./imgs/repeat.svg"/><img class="repeat-1 hide" src="./imgs/repeat1.svg"/></span>
           
           <span id="currenttime">00:00</span>
@@ -143,7 +155,6 @@
           </button>
         </div>
   
-
       </section>
     </div>
     <div style="height:0;overflow: hidden;visibility: hidden;">

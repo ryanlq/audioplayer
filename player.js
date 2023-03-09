@@ -172,4 +172,11 @@ export class Player extends EventTarget {
   set loop(loop) {
     this.audio.loop = loop;
   }
+  get playbackRate() {
+    return this.audio.playbackRate ;
+  }
+
+  set playbackRate (playbackRate ) {
+    this.audio.playbackRate  = playbackRate ;
+  }
 }

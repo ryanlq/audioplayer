@@ -6,32 +6,10 @@ body{
     height: 100% !important;
     width: 100% !important;
     max-width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
 
 }
 
-:root {
-    --safe-top: 0px;
-    --safe-bottom: 0px;
-  }
-  
-  @supports (top: constant(safe-area-inset-top)) {
-    :root {
-      --safe-top: constant(safe-area-inset-top);
-      --safe-bottom: constant(safe-area-inset-bottom);
-    }
-  }
-  
-  @supports (top: env(safe-area-inset-top)) {
-    :root {
-      --safe-top: env(safe-area-inset-top);
-      --safe-bottom: env(safe-area-inset-bottom);
-    }
-  }
 #lyric-panel{
-    padding-top: var(--safe-top);
     visibility: hidden;
     font-family:STFangsong ;
     display: flex;
@@ -188,7 +166,7 @@ html.playing  .lyric-item.playing,.lyric-item.playing{
     justify-content: space-between;
     width: 100%;
     height: 100%;
-    position: fixed;
+
     background-color: #11191f30;
 }
 
