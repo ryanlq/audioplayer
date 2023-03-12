@@ -15,6 +15,7 @@ import { LyricParser } from "./libs/LyricParser.js"
 import { preload } from "./libs/preload.js"
 import { toast,closeToast } from "./libs/toast.js"
 import { fileReader } from "./libs/readlocalfile.js"
+import { seekWord, openDictPanel } from "./libs/seekHoverWord.js"
 
 // Whether the app is running in the Microsoft Edge sidebar.
 const isSidebarPWA = (() => {
@@ -53,6 +54,9 @@ const TagMenusContainer = document.querySelector('#header ul');
 const TagMenus = document.querySelectorAll('#header ul li');
 const SpeedBtn = document.querySelector('#speed .label');
 const SpeedOptions = document.querySelector('#speed .options');
+
+let isMobile = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
+isMobile && isMobile.length >0 ?isMobile = true:isMobile=false
 
 let currentSongEl = null;
 
@@ -346,6 +350,28 @@ function loadLyric(force=false){
   }
 }
 
+function lyric_click_handler(e){
+  if(document.documentElement.classList.contains("playing")){
+    const _time = e.target.getAttribute("data-time")
+    const _currentTime = parseInt(_time.slice(0,2)) * 60 + parseInt(_time.slice(3,5))
+    if(player.isBuffered()){
+      player.currentTime = _currentTime
+    } else {
+      toast({msg:"未缓冲完成"})
+    }
+  } else {
+    speak(e.target.innerText,false)
+  }
+}
+
+function lyric_longpress_handler(e){
+  const paddingLeft = 5
+  let dict_panel = openDictPanel(e,paddingLeft)
+  if(dict_panel){
+    lyricPanel.appendChild(dict_panel)
+  }
+}
+
 async function setLyricPanel(isEmpty=false){
   //updateExtra
   lyricPanel.innerHTML = ""
@@ -377,20 +403,40 @@ async function setLyricPanel(isEmpty=false){
       let new_node = item_node.cloneNode(true)
       new_node.setAttribute("data-time",s)
       new_node.innerText = lyric.lyric[s]
-      new_node.addEventListener("click",function(e){
-        if(document.documentElement.classList.contains("playing")){
-          const _time = new_node.getAttribute("data-time")
-          const _currentTime = parseInt(_time.slice(0,2)) * 60 + parseInt(_time.slice(3,5))
-          if(player.isBuffered()){
-            player.currentTime = _currentTime
-          } else {
-            toast({msg:"未缓冲完成"})
-          }
-        } else {
-          speak(e.target.innerText,false)
-        }
-  
-      })
+      if(isMobile){
+        let timeOutEvent = null;
+        let isLongTouch = false
+        new_node.addEventListener('touchstart', (e) => {
+            timeOutEvent = setTimeout(() => {
+              isLongTouch = true;
+              timeOutEvent = 0;
+
+              // ios 默认长按选中单词，对换行文字支持更好！
+              // splitWords(e)
+              // let dict_panel = seekWord(e,{padding:"5px"})
+              lyric_longpress_handler(e)
+
+            }, 700);
+            return false;
+        });
+        new_node.addEventListener('touchend', (e) => {
+            clearTimeout(timeOutEvent);
+            if(isLongTouch){
+              isLongTouch = false;
+            } else {
+              lyric_click_handler(e)
+            }
+            return false;
+        });
+      } else {
+        new_node.addEventListener("dblclick",function(e){
+          lyric_longpress_handler(e)
+        })
+      
+        new_node.addEventListener("click",function(e){
+          lyric_click_handler(e)
+        })
+      }
       return new_node
     })
     
@@ -600,7 +646,6 @@ function attach_extra_events(){
   SpeedOptions.querySelectorAll("li").forEach(opt=>{
     opt.addEventListener("click",e=>{
       const value = opt.innerText
-      console.log(value)
       player.playbackRate = value
       SpeedBtn.setAttribute("speed",value)
       SpeedBtn.innerText = value
@@ -616,5 +661,11 @@ window.onload = ()=>{
   preload()
   manageSongs()
   handle_tag()
+    document.addEventListener("click",e=>{
+        const dict_panel_node = document.querySelector("#dict-panel")
+        if(dict_panel_node &&(dict_panel_node.id=="dict-panel" ||dict_panel_node.contains(e.target))){
+            dict_panel_node.remove()
+        }
+    })
   
 }

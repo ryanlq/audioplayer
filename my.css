@@ -82,7 +82,8 @@ html,body{
     right: -1px;
     grid-area: lyric;
     padding-top: var(--safe-top);
-    font-family:STFangsong ;
+    font-family:FiraCode-Regular,STFangsong ;
+    src: url('fonts/FiraCode-Regular.woff');
     align-items:center;
     justify-self:center;
     /* box-shadow: 0px 0px 0px 4px var(--primary); */
@@ -92,11 +93,14 @@ html,body{
     -ms-overflow-style: none; /* IE */
     scrollbar-width: none; /* Firefox */
 }
+.learning #lyric-panel{
+    user-select: text !important;
+}
 
 .visualizing #lyric-panel{
     height: auto;
     width: 100%;
-    position:unset;
+    position:relative;
     display:flex;
     padding: 20px 0 100px 0;
 }
@@ -130,11 +134,15 @@ html.playing .lyric-item{
 html:not(.playing) .lyric-item:hover{
     background-color: #000;
 }
-html:not(.playing) .lyric-item:hover::after{
+html:not(.playing):not(.learning) .lyric-item:hover::after{
     content:" [讲述人]";
     display: inline;
     color: var(--origin);
     font-size: 12px;
+}
+.lyric-item::selection{
+    color:red;
+    background-color: #fff;
 }
 /* html.playing .lyric-item:hover::after{
     content:"[此处播放]";
@@ -542,10 +550,11 @@ display: none;
     display: none !important;
 }
 .learning #speed{
-    display: none;
+    display: inline-block;
 }
 #speed{
     grid-area: s;
+    display: none;
 }
 #speed .options{
     position: absolute;

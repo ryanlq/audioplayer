@@ -1,6 +1,5 @@
 import { hasRemoteURLSong, addRemoteURLSong, addLocalFileSong, addMultipleLocalFileSongs } from "./store.js";
 import { formatTime, guessSongInfo } from "./utils.js";
-import { lyrics } from "./datas/lyrics.js"
 import { LyricParser } from "./libs/LyricParser.js"
 
 // To add new songs into the store, the app uses this importer instead of the
@@ -64,11 +63,8 @@ export async function importSongsFromFiles(files) {
     const url = await turnFileIntoURL(file);
     const duration = await getSongDuration(url);
     let _data = { title, artist, album, duration: formatTime(duration), file,picture }
-    _data["lyric"] = ""
-    if(lyrics[title]) _data["lyric"] = lyrics[title]
-    else{
-      _data["lyric"] = await LyricParser(title,artist)
-    }
+    _data["lyric"] = await LyricParser(title,artist)
+
     songs.push(_data);
   }));
 

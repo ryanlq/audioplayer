@@ -287,3 +287,20 @@ export async function getExtraByID(id=null) {
   }
   
 }
+
+export async function setVariants(datas) {
+  let variants = await getVariants()
+  if(!variants) variants = {}
+  datas.forEach(data=>{
+    variants[data[0]] = data[1]
+  })
+  await set('dict-variants', variants);
+}
+
+export async function getVariants(id=null) {
+  const variants = await get('dict-variants');
+  if(variants && id){
+    return variants[id];
+  }
+  return variants;
+}
