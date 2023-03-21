@@ -206,8 +206,8 @@ export async function sortSongsBy(field) {
   }
 
   let songs = await getSongs();
-
-  songs = songs.sort((a, b) => {
+  let titles = songs.map(s=>s.title)
+  let _songs = songs.sort((a, b) => {
     return a[field].localeCompare(b[field],'zh-CN')
     // if (a[field] < b[field]) {
     //   return field === 'dateAdded' ? 1 : -1;
@@ -217,7 +217,11 @@ export async function sortSongsBy(field) {
     //   return 0;
     // }
   });
-  await set('pwamp-songs', songs);
+  let _title = _songs.map(s=>s.title)
+  if(_title !== titles.toString()){
+    await set('pwamp-songs', _songs);
+  }
+  return true
 }
 
 /**

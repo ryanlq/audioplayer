@@ -65,7 +65,6 @@ let isFirstUse = true;
 // Instantiate the player object. It will be used to play/pause/seek/... songs. 
 const player = new Player();
 window._player = player; //for test
-sortSongsBy("title")
 
 
 // Instantiate the player object. It will be used to play/pause/seek/... songs. 
@@ -658,7 +657,8 @@ function attach_extra_events(){
 
 
 
-window.onload = ()=>{
+window.onload = async ()=>{
+
   attach_extra_events()
   preload()
   manageSongs()
@@ -668,6 +668,8 @@ window.onload = ()=>{
         if(dict_panel_node &&(dict_panel_node.id=="dict-panel" ||dict_panel_node.contains(e.target))){
             dict_panel_node.remove()
         }
-    })
+  })
+  const isloaded = await sortSongsBy("title")
+  if(isloaded) document.body.classList.remove("loading")
   
 }
