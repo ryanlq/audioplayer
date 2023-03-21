@@ -65,6 +65,8 @@ let isFirstUse = true;
 // Instantiate the player object. It will be used to play/pause/seek/... songs. 
 const player = new Player();
 window._player = player; //for test
+sortSongsBy("title")
+
 
 // Instantiate the player object. It will be used to play/pause/seek/... songs. 
 const lyric = new Lyric();

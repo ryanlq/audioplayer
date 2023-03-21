@@ -74,7 +74,7 @@ export function createSongUI(playlistSongsContainer, song, stateLess,tagstr="") 
   const titleInput = document.createElement("span");
   titleInput.classList.add('title');
   titleInput.setAttribute('title', song.title+' - '+song.artist);
-  titleInput.textContent = song.title +' - '+song.artist;
+  titleInput.textContent = song.title.replace(/【.*】/,"") +' - '+song.artist;
   if (!stateLess) {
     titleInput.setAttribute('contenteditable', true);
     titleInput.setAttribute('spellcheck', false);

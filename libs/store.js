@@ -53,6 +53,7 @@ export async function getSongs() {
  */
 export async function getSong(id) {
   const songs = await getSongs();
+  console.log(songs)
   return songs.find(song => song.id === id);
 }
 
@@ -207,13 +208,14 @@ export async function sortSongsBy(field) {
   let songs = await getSongs();
 
   songs = songs.sort((a, b) => {
-    if (a[field] < b[field]) {
-      return field === 'dateAdded' ? 1 : -1;
-    } else if (a[field] > b[field]) {
-      return field === 'dateAdded' ? -1 : 1;
-    } else {
-      return 0;
-    }
+    return a[field].localeCompare(b[field],'zh-CN')
+    // if (a[field] < b[field]) {
+    //   return field === 'dateAdded' ? 1 : -1;
+    // } else if (a[field] > b[field]) {
+    //   return field === 'dateAdded' ? -1 : 1;
+    // } else {
+    //   return 0;
+    // }
   });
   await set('pwamp-songs', songs);
 }
