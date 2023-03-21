@@ -1,6 +1,6 @@
 import { applyCustomSkin } from "./skin.js";
 import { importSongFromFile } from "./importer.js";
-import { startApp, playlistSongsContainer } from "./app.js";
+import { startApp, playlistSongsContainer } from "../app.js";
 import { createLoadingSongPlaceholders } from "./song-ui-factory.js";
 
 const AUDIO_EXTENSIONS = [".wav", ".mp3", ".mp4", ".adts", ".ogg", ".webm", ".flac"];

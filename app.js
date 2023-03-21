@@ -1,15 +1,15 @@
-import { getSongs, getSong, getTags,getExtra,updateExtra ,editSong,editSongTags, setVolume, getVolume, deleteSong, deleteAllSongs, addLocalFileSong, setArtwork, wasStoreEmpty, sortSongsBy } from "./store.js";
-import { Player } from "./player.js";
-import { Lyric } from "./lyric.js";
-import { formatTime, openFilesFromDisk, getFormattedDate, canShare, analyzeDataTransfer, getImageAsDataURI } from "./utils.js";
-import { importSongsFromFiles } from "./importer.js";
-import { Visualizer } from "./visualizer.js";
+import { getSongs, getSong, getTags,getExtra,updateExtra ,editSong,editSongTags, setVolume, getVolume, deleteSong, deleteAllSongs, addLocalFileSong, setArtwork, wasStoreEmpty, sortSongsBy } from "./libs/store.js";
+import { Player } from "./libs/player.js";
+import { Lyric } from "./libs/lyric.js";
+import { formatTime, openFilesFromDisk, getFormattedDate, canShare, analyzeDataTransfer, getImageAsDataURI } from "./libs/utils.js";
+import { importSongsFromFiles } from "./libs/importer.js";
+import { Visualizer } from "./libs/visualizer.js";
 // import { exportSongToFile } from "./exporter.js";
-import { loadCustomOrResetSkin, reloadStoredCustomSkin } from "./skin.js";
+import { loadCustomOrResetSkin, reloadStoredCustomSkin } from "./libs/skin.js";
 // import { startRecordingAudio, stopRecordingAudio } from "./recorder.js";
-import { createSongUI, removeAllSongs, createLoadingSongPlaceholders, removeLoadingSongPlaceholders } from "./song-ui-factory.js";
+import { createSongUI, removeAllSongs, createLoadingSongPlaceholders, removeLoadingSongPlaceholders } from "./libs/song-ui-factory.js";
 import { initMediaSession } from "./media-session.js";
-import { initKeyboardShortcuts } from "./keys.js";
+import { initKeyboardShortcuts } from "./libs/keys.js";
 import { Speaker } from "./libs/Speaker.js";
 import { LyricParser } from "./libs/LyricParser.js"
 import { preload } from "./libs/preload.js"

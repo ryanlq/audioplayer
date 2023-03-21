@@ -1,4 +1,4 @@
-import parseAudioMetadata from "./parseAudioMetadata.js";
+import parseAudioMetadata from "./libs/parseAudioMetadata.js";
 
 onmessage = async (e) => {
   console.log('Worker: Message received from main script');

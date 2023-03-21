@@ -1,4 +1,4 @@
-import { updateExtra,getExtraByID } from "../store.js";
+import { updateExtra,getExtraByID } from "./store.js";
 import { toast } from "./toast.js"
 const texter = new TextDecoder()
 

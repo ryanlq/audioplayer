@@ -1,6 +1,6 @@
 import { get, del } from './idb-keyval.js';
 import { importSongsFromFiles } from "./importer.js";
-import { startApp } from "./app.js";
+import { startApp } from "../app.js";
 import { createLoadingSongPlaceholders } from "./song-ui-factory.js";
 
 // If a song was shared with the app by using the PWA share target feature,

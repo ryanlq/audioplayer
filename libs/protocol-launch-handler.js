@@ -1,5 +1,5 @@
 import { importSongFromURL } from "./importer.js";
-import { startApp } from "./app.js";
+import { startApp } from "../app.js";
 import { getSongNameFromURL } from "./utils.js";
 import { applyCustomSkin }  from "./skin.js";
 

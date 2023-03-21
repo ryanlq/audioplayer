@@ -5,7 +5,8 @@
 * by Takafumi Yamano
 */
 
-import { setVariants,getVariants } from "../store.js";
+
+import { setVariants,getVariants } from "./store.js";
 
 // extend String and define String#endsWith
 if (typeof String.endsWith !== "function") {

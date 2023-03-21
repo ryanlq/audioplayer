@@ -1,4 +1,4 @@
-import { getImageAsDataURI } from './utils.js';
+import { getImageAsDataURI } from './libs/utils.js';
 
 export function initMediaSession(player) {
   if (!('mediaSession' in navigator)) {

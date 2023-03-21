@@ -37,7 +37,7 @@ screen to always look the same, no matter what skin is used. */
 #about-dialog .screenshot {
   grid-column: 2;
   grid-row: 1 / -1;
-  background-image: url(./visualizer.png);
+  background-image: url(./imgs/visualizer.png);
   background-repeat: no-repeat;
   background-size: cover;
 }
